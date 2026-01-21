@@ -1,0 +1,25 @@
+# Set index.php as the default DirectoryIndex
+DirectoryIndex index.php
+
+# Enable rewrite engine
+RewriteEngine On
+
+# Redirect login.php to index.php
+RewriteRule ^login\.php$ index.php [R=301,L]
+
+# Prevent directory listing
+Options -Indexes
+
+# Security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# PHP settings
+<IfModule mod_php7.c>
+    php_flag display_errors Off
+    php_flag log_errors On
+    php_value error_log logs/php_error.log
+</IfModule>

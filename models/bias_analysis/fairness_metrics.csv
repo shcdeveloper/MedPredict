@@ -1,0 +1,8 @@
+group,metric,value
+gender,demographic_parity,0.005624487037126438
+gender,disparate_impact,0.8220015278838809
+gender,equal_opportunity,0.014285714285714346
+gender,accuracy_difference,0.000635671639389046
+gender,is_fair_demographic,True
+gender,is_fair_disparate,True
+gender,is_fair_opportunity,True

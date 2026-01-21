@@ -1,0 +1,7 @@
+Method,N_Features,Features,Accuracy,ROC_AUC
+All Features (Baseline),5,"age, heart_rate, glucose, prior_admission, gender_encoded",0.955,0.9315321983715767
+Univariate (F-test),3,"age, heart_rate, prior_admission",0.955,0.8005181347150259
+Univariate (MI),3,"age, heart_rate, prior_admission",0.955,0.8005181347150259
+RFE,3,"age, heart_rate, glucose",0.965,0.892301998519615
+RFECV,5,"age, heart_rate, glucose, prior_admission, gender_encoded",0.955,0.9315321983715767
+Feature Importance,3,"age, heart_rate, glucose",0.965,0.892301998519615

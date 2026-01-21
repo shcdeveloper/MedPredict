@@ -1,0 +1,23 @@
+services:
+  # FastAPI Backend
+  - type: web
+    name: healthcare-api
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+      python -m api.train_model
+      python api/train_disease_models.py
+    startCommand: uvicorn api.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: PORT
+        value: 8000
+      - key: DB_HOST
+        value: sql123.infinityfree.com
+      - key: DB_PORT
+        value: 3306
