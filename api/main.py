@@ -11,6 +11,8 @@ import pandas as pd
 from datetime import datetime
 import os
 from pathlib import Path
+import sqlite3
+import json
 
 from api.schemas import PatientInput, PredictionOutput, HealthResponse, ModelInfo, DiseasePredictionInput, DiseasePredictionOutput
 
@@ -360,6 +362,49 @@ async def predict_disease_risk(patient: DiseasePredictionInput):
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Disease prediction error: {str(e)}")
+
+
+@app.get("/dashboard/stats", tags=["Dashboard"])
+async def get_dashboard_stats():
+    """
+    Get dashboard statistics
+    Returns aggregated statistics for the dashboard
+    """
+    # For now, return mock/default stats since we don't have a database connection yet
+    # TODO: Connect to actual database when available
+    
+    return {
+        "total_predictions": 0,
+        "active_days": 0,
+        "avg_prediction_score": 0.0,
+        "high_risk_count": 0,
+        "medium_risk_count": 0,
+        "low_risk_count": 0,
+        "male_count": 0,
+        "female_count": 0,
+        "avg_patient_age": 0.0,
+        "last_prediction_date": None,
+        "models_loaded": {
+            "admission_model": model is not None,
+            "disease_models": len(disease_models) > 0
+        }
+    }
+
+
+@app.get("/dashboard/recent", tags=["Dashboard"])
+async def get_recent_predictions():
+    """
+    Get recent predictions
+    Returns the most recent predictions made
+    """
+    # For now, return empty array since we don't have a database connection yet
+    # TODO: Connect to actual database when available
+    
+    return {
+        "predictions": [],
+        "count": 0,
+        "message": "No predictions stored yet. Database integration pending."
+    }
 
 
 if __name__ == "__main__":
