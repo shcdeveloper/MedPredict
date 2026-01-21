@@ -268,11 +268,22 @@ async def predict_disease_risk(patient: DiseasePredictionInput):
         for disease_name in ['diabetes', 'heart_disease', 'hypertension']:
             # Encode categorical features
             input_encoded = input_df.copy()
+            
+            # Convert 'None' string to NaN for fields that were trained with NaN
+            # This handles the mismatch between form data and training data
+            if input_encoded['alcohol'].iloc[0] == 'None':
+                input_encoded['alcohol'] = np.nan
+            
             encoders = disease_encoders[disease_name]
             
             try:
                 for col, encoder in encoders.items():
-                    input_encoded[col] = encoder.transform(input_df[col])
+                    # Skip NaN values - they're handled separately by the model
+                    if pd.isna(input_encoded[col].iloc[0]):
+                        # Use a default encoding for NaN (usually 0 or -1)
+                        input_encoded[col] = -1
+                    else:
+                        input_encoded[col] = encoder.transform(input_df[col])
             except ValueError as e:
                 raise HTTPException(
                     status_code=400,

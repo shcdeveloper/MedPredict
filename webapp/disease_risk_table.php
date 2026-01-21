@@ -499,9 +499,10 @@ $result = $conn->query($sql);
                                 <td><?php echo number_format($row['bmi'], 1); ?></td>
                                 <td>
                                     <span class="risk-score" style="color: <?php 
-                                        echo $row['overall_risk'] > 0.6 ? 'var(--danger)' : ($row['overall_risk'] > 0.3 ? 'var(--warning)' : 'var(--success)'); 
+                                        $overall_risk_value = floatval($row['overall_risk']);
+                                        echo $overall_risk_value > 0.6 ? 'var(--danger)' : ($overall_risk_value > 0.3 ? 'var(--warning)' : 'var(--success)'); 
                                     ?>; font-weight: 700; font-size: 16px;">
-                                        <?php echo number_format($row['overall_risk'] * 100, 1); ?>%
+                                        <?php echo number_format($overall_risk_value * 100, 1); ?>%
                                     </span>
                                 </td>
                                 <td>

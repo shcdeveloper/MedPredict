@@ -52,7 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Check for API errors
         if ($prediction_result && isset($prediction_result['detail'])) {
-            $error = "Prediction Error: " . $prediction_result['detail'];
+            // Handle both string and array error messages
+            $error_detail = is_array($prediction_result['detail']) ? json_encode($prediction_result['detail']) : $prediction_result['detail'];
+            $error = "Prediction Error: " . $error_detail;
             $prediction_result = null;
         } elseif (!$prediction_result || !isset($prediction_result['diabetes_risk'])) {
             $error = "Invalid response from API. Response: " . substr($result, 0, 200);
