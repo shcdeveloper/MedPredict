@@ -8,7 +8,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 -- Drop existing tables
 DROP TABLE IF EXISTS `admin_sessions`;
@@ -38,7 +38,7 @@ CREATE TABLE `admin_users` (
   UNIQUE KEY `email` (`email`),
   KEY `idx_username` (`username`),
   KEY `idx_email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 INSERT INTO `admin_users` VALUES
 (4, 'admin', '$2y$10$vZLZPxrtSJzKvY8YOwg4ne5R1PGoFZTHSc6VWrzsjEDYNs2Oew5Ve', 'System Administrator', 'admin@hospital.com', 'admin', 1, '2026-01-21 04:46:54', '2026-01-19 02:17:33'),
@@ -65,7 +65,7 @@ CREATE TABLE `patient_requests` (
   KEY `idx_created_at` (`created_at`),
   KEY `idx_risk_level` (`risk_level`),
   CONSTRAINT `patient_requests_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `admin_users` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 INSERT INTO `patient_requests` VALUES
 (1, NULL, NULL, 25, 'M', 95, 140, 0, 0.21, 'Low', '2026-01-19 01:38:37'),
@@ -120,7 +120,7 @@ CREATE TABLE `disease_risk_assessments` (
   KEY `idx_diabetes_level` (`diabetes_level`),
   KEY `idx_heart_disease_level` (`heart_disease_level`),
   KEY `idx_hypertension_level` (`hypertension_level`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 INSERT INTO `disease_risk_assessments` VALUES
 (1, '1', 75, 'Female', 25.4, 'Former', 'None', 'Sedentary', 1, 1, 1, 114, 74, 78, 85, 177, 70, 129, 108, 0.661, 'High', 0.8835, 'High', 0.7566, 'High', 'Critical', '2026-01-05 09:27:50'),
@@ -142,7 +142,7 @@ CREATE TABLE `admin_sessions` (
   KEY `user_id` (`user_id`),
   KEY `idx_session_token` (`session_token`),
   CONSTRAINT `admin_sessions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `admin_users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- =====================================================
 -- TABLE: dashboard_stats (CONVERTED FROM VIEW)
@@ -162,7 +162,7 @@ CREATE TABLE `dashboard_stats` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `idx_updated_at` (`updated_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 INSERT INTO `dashboard_stats` (`id`, `total_predictions`, `active_days`, `avg_prediction_score`, `high_risk_count`, `medium_risk_count`, `low_risk_count`, `male_count`, `female_count`, `avg_patient_age`, `last_prediction_date`) VALUES
 (1, 13, 7, 0.32, 2, 1, 10, 6, 7, 52.5, '2026-01-21 04:48:47');
@@ -189,7 +189,7 @@ CREATE TABLE `disease_risk_statistics` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `idx_updated_at` (`updated_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 INSERT INTO `disease_risk_statistics` (`id`, `total_assessments`, `high_diabetes_risk`, `medium_diabetes_risk`, `low_diabetes_risk`, `high_heart_disease_risk`, `medium_heart_disease_risk`, `low_heart_disease_risk`, `high_hypertension_risk`, `medium_hypertension_risk`, `low_hypertension_risk`, `critical_risk_count`, `elevated_risk_count`, `moderate_risk_count`, `avg_age`) VALUES
 (1, 4, 2, 0, 2, 2, 1, 1, 4, 0, 0, 2, 2, 0, 54);
@@ -214,7 +214,7 @@ CREATE TABLE `recent_disease_assessments` (
   KEY `disease_id` (`disease_id`),
   KEY `idx_assessed_date` (`assessed_date`),
   CONSTRAINT `recent_disease_ibfk_1` FOREIGN KEY (`disease_id`) REFERENCES `disease_risk_assessments` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 INSERT INTO `recent_disease_assessments` (`id`, `disease_id`, `patient_age`, `gender`, `diabetes_risk`, `diabetes_level`, `heart_disease_risk`, `heart_disease_level`, `hypertension_risk`, `hypertension_level`, `overall_risk`, `assessed_date`) VALUES
 (1, 102, 25, 'Female', 0.135, 'Low', 0.0058, 'Low', 0.9981, 'High', 'Elevated', '2026-01-21 05:18:26'),
@@ -236,7 +236,7 @@ CREATE TABLE `recent_predictions` (
   KEY `patient_id` (`patient_id`),
   KEY `idx_created_date` (`created_date`),
   CONSTRAINT `recent_predictions_ibfk_1` FOREIGN KEY (`patient_id`) REFERENCES `patient_requests` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 INSERT INTO `recent_predictions` (`id`, `patient_id`, `patient_name`, `age`, `gender`, `prediction_score`, `risk_level`, `created_date`) VALUES
 (1, 405, 'Juan Dela Cruz', 50, 'F', 0.1, 'Low', '2026-01-21 04:48:47'),
