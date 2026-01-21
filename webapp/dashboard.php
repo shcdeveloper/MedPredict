@@ -10,13 +10,41 @@ $conn = getDBConnection();
 $stats = [];
 
 if ($conn) {
-    $result = $conn->query("SELECT * FROM dashboard_stats");
+    // Get dashboard stats directly from patient_requests table
+    $statsQuery = "SELECT 
+        COUNT(*) as total_predictions,
+        COUNT(DISTINCT DATE(created_at)) as active_days,
+        AVG(prediction) as avg_prediction_score,
+        SUM(CASE WHEN risk_level IN ('high', 'High') THEN 1 ELSE 0 END) as high_risk_count,
+        SUM(CASE WHEN risk_level IN ('medium', 'Medium') THEN 1 ELSE 0 END) as medium_risk_count,
+        SUM(CASE WHEN risk_level IN ('low', 'Low') THEN 1 ELSE 0 END) as low_risk_count,
+        SUM(CASE WHEN gender IN ('M', 'Male') THEN 1 ELSE 0 END) as male_count,
+        SUM(CASE WHEN gender IN ('F', 'Female') THEN 1 ELSE 0 END) as female_count,
+        AVG(age) as avg_patient_age,
+        MAX(created_at) as last_prediction_date
+    FROM patient_requests";
+    
+    $result = $conn->query($statsQuery);
     if ($result && $result->num_rows > 0) {
         $stats = $result->fetch_assoc();
     }
     
-    // Get recent predictions
-    $recent = $conn->query("SELECT * FROM recent_predictions LIMIT 10");
+    // Get recent predictions directly from patient_requests with JOIN
+    $recentQuery = "SELECT 
+        pr.id, 
+        pr.patient_name, 
+        pr.age, 
+        pr.gender, 
+        pr.prediction, 
+        pr.risk_level, 
+        pr.created_at,
+        au.full_name AS clinician_name
+    FROM patient_requests pr
+    LEFT JOIN admin_users au ON pr.user_id = au.id
+    ORDER BY pr.created_at DESC 
+    LIMIT 10";
+    
+    $recent = $conn->query($recentQuery);
     
     closeDBConnection($conn);
 }

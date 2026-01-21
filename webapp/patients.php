@@ -10,7 +10,25 @@ $conn = getDBConnection();
 $patients = [];
 
 if ($conn) {
-    $result = $conn->query("SELECT * FROM recent_predictions");
+    // Query patient_requests directly with clinician info
+    $query = "SELECT 
+        pr.id, 
+        pr.patient_name, 
+        pr.age, 
+        pr.gender, 
+        pr.heart_rate,
+        pr.glucose,
+        pr.prior_admission,
+        pr.prediction, 
+        pr.risk_level, 
+        pr.created_at,
+        au.full_name AS clinician_name
+    FROM patient_requests pr
+    LEFT JOIN admin_users au ON pr.user_id = au.id
+    ORDER BY pr.created_at DESC 
+    LIMIT 100";
+    
+    $result = $conn->query($query);
     if ($result) {
         while ($row = $result->fetch_assoc()) {
             $patients[] = $row;
