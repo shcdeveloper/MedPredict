@@ -2,6 +2,7 @@
 import pandas as pd
 import mlflow
 import mlflow.sklearn
+import joblib
 from pathlib import Path
 from typing import Dict, Any, Tuple
 
@@ -172,7 +173,6 @@ class MedPredictTrainer:
             disease_model.save(f"{models_dir}/disease_risk_assessor.pkl")
             
             # Save preprocessor
-            import joblib
             joblib.dump(self.preprocessor, f"{models_dir}/preprocessor.pkl")
             logger.info("Preprocessor saved")
         

@@ -1,5 +1,5 @@
 """Pydantic models for API request/response validation."""
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field
 from typing import List, Dict, Optional
 from enum import Enum
 
