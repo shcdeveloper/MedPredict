@@ -59,6 +59,7 @@ mlartifacts/
 .pytest_cache/
 .coverage
 htmlcov/
+test_api_call.py
 
 # OS
 .DS_Store
