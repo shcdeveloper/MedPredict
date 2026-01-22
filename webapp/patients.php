@@ -177,11 +177,11 @@ if ($conn) {
                                     <td><?php echo htmlspecialchars($row['clinician_name'] ?? 'N/A'); ?></td>
                                     <td><?php echo date('M d, Y H:i', strtotime($row['created_at'])); ?></td>
                                     <td>
-                                        <div style="display: flex; gap: 8px;">
-                                            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;">
+                                        <div style="display: flex; gap: 8px; align-items: center;">
+                                            <button class="btn btn-outline" style="padding: 8px 14px; font-size: 12px; white-space: nowrap;">
                                                 <i class="fas fa-eye"></i> View
                                             </button>
-                                            <button class="btn btn-danger-outline" onclick="deletePatient(<?php echo $row['id']; ?>)" style="padding: 6px 12px; font-size: 12px; border-color: #ef4444; color: #ef4444;">
+                                            <button class="btn" onclick="deletePatient(<?php echo $row['id']; ?>)" style="padding: 8px 14px; font-size: 12px; background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; white-space: nowrap;">
                                                 <i class="fas fa-trash"></i> Delete
                                             </button>
                                         </div>
