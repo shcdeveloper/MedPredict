@@ -5,6 +5,27 @@ require_once 'config/db.php';
 requireLogin();
 $user = getCurrentUser();
 
+// Handle delete request
+$deleteSuccess = false;
+$deleteError = false;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
+    $patientId = intval($_POST['patient_id']);
+    $conn = getDBConnection();
+    
+    if ($conn) {
+        $deleteQuery = "DELETE FROM patient_requests WHERE id = " . $patientId;
+        if ($conn->query($deleteQuery) === TRUE) {
+            $deleteSuccess = true;
+            header("Location: patients.php?deleted=1");
+            exit();
+        } else {
+            $deleteError = true;
+        }
+        closeDBConnection($conn);
+    }
+}
+
 // Get all patient records
 $conn = getDBConnection();
 $patients = [];
@@ -156,9 +177,14 @@ if ($conn) {
                                     <td><?php echo htmlspecialchars($row['clinician_name'] ?? 'N/A'); ?></td>
                                     <td><?php echo date('M d, Y H:i', strtotime($row['created_at'])); ?></td>
                                     <td>
-                                        <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;">
-                                            <i class="fas fa-eye"></i> View
-                                        </button>
+                                        <div style="display: flex; gap: 8px;">
+                                            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;">
+                                                <i class="fas fa-eye"></i> View
+                                            </button>
+                                            <button class="btn btn-danger-outline" onclick="deletePatient(<?php echo $row['id']; ?>)" style="padding: 6px 12px; font-size: 12px; border-color: #ef4444; color: #ef4444;">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
@@ -193,6 +219,27 @@ if ($conn) {
                 row.style.display = text.includes(searchTerm) ? '' : 'none';
             }
         });
+
+        // Delete patient function with confirmation
+        function deletePatient(patientId) {
+            if (confirm('Are you sure you want to delete this patient record? This action cannot be undone.')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.innerHTML = `
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="patient_id" value="${patientId}">
+                `;
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+
+        // Show success message if deleted
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('deleted') === '1') {
+            alert('Patient record deleted successfully!');
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
     </script>
 </body>
 </html>
